@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RequireJS Anonymous Define</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+</head>
+
+<body>
+  <button id="requireTestFunction">On Demand Require</button>
+  <button id="defineAnonymous">Load Anonymous Define</button>
+  <script>
+
+    const SCRIPT_HAVING_ANONYMOUS_DEFINE = "/anonymous-define.js";
+
+    define("helper/util", [], function () {
+      return {
+        print(msg) {
+          console.log(`From require uil: ${msg}`);
+        },
+      };
+    });
+    requirejs(["helper/util"], function (util) {
+      util.print('Page loaded');
+    });
+    document.getElementById('requireTestFunction').addEventListener('click', (e => {
+      requirejs(["helper/util"], function (util) {
+        util.print('On Demand require working');
+      });
+    }));
+    document.getElementById('defineAnonymous').addEventListener('click', (e => {
+      console.log('Loading Anonymous define');
+      const scriptElement = document.createElement('script');
+      scriptElement.src = SCRIPT_HAVING_ANONYMOUS_DEFINE;
+      scriptElement.onload = () => { console.log('Anonymous Define Loaded'); }
+      document.head.appendChild(scriptElement);
+    }));
+  </script>
+</body>
+
+</html>
